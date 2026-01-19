@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import numpy as np
-import requests
+import gdown
 import os
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
@@ -10,18 +10,19 @@ from io import BytesIO
 app = Flask(__name__)
 
 MODEL_DIR = "model"
-MODEL_PATH = os.path.join(MODEL_DIR, "cama_cnn.keras")
+MODEL_FILENAME = "cama_cnn.keras"
+MODEL_PATH = os.path.join(MODEL_DIR, MODEL_FILENAME)
 
-# 🔽 LINK DIRECTO DE DESCARGA (NO el /view)
-MODEL_URL = "https://drive.google.com/uc?export=download&id=1xDqy3KG9qveOq4gcDZ0sJOv1UIwV5uQU"
+FILE_ID = "1xDqy3KG9qveOq4gcDZ0sJOv1UIwV5uQU"
 
 def download_model():
     if not os.path.exists(MODEL_PATH):
         os.makedirs(MODEL_DIR, exist_ok=True)
-        r = requests.get(MODEL_URL, stream=True)
-        with open(MODEL_PATH, "wb") as f:
-            for chunk in r.iter_content(chunk_size=8192):
-                f.write(chunk)
+        gdown.download(
+                url=f"https://drive.google.com/uc?id={FILE_ID}",
+                output=MODEL_PATH,
+                quiet=False
+        )
 
 download_model()
 model = load_model(MODEL_PATH)
