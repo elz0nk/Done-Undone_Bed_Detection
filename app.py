@@ -13,7 +13,7 @@ MODEL_DIR = "model"
 MODEL_FILENAME = "cama_cnn.keras"
 MODEL_PATH = os.path.join(MODEL_DIR, MODEL_FILENAME)
 
-FILE_ID = "1Mhux98uyhgVOj_1iUVfg3VGVV8H1Eolc"
+FILE_ID = "1xDqy3KG9qveOq4gcDZ0sJOv1UIwV5uQU"
 
 def download_model():
     if not os.path.exists(MODEL_PATH):
@@ -55,4 +55,5 @@ def predict():
         "prediction": label,
         "confidence": float(pred)
     })
+
 
