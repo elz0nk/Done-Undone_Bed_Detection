@@ -19,9 +19,10 @@ def download_model():
     if not os.path.exists(MODEL_PATH):
         os.makedirs(MODEL_DIR, exist_ok=True)
         gdown.download(
-                url=f"https://drive.google.com/uc?id={FILE_ID}",
+                id=FILE_ID,
                 output=MODEL_PATH,
-                quiet=False
+                quiet=False,
+                fuzzy=True
         )
 
 download_model()
@@ -57,6 +58,7 @@ def predict():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
 
 
