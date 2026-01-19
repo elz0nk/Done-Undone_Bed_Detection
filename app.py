@@ -11,7 +11,7 @@ from tensorflow.keras.layers import Dense
 app = Flask(__name__)
 
 MODEL_DIR = "model"
-MODEL_FILENAME = "cama_cnn.keras"
+MODEL_FILENAME = "cama_cnn.h5"
 MODEL_PATH = os.path.join(MODEL_DIR, MODEL_FILENAME)
 
 FILE_ID = "1xDqy3KG9qveOq4gcDZ0sJOv1UIwV5uQU"
@@ -60,6 +60,7 @@ def predict():
         "prediction": label,
         "confidence": float(pred)
     })
+
 
 
 
