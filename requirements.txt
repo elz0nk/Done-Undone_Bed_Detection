@@ -4,3 +4,5 @@ tensorflow==2.15.0
 opencv-python-headless==4.9.0.80
 pillow==10.2.0
 scipy==1.11.4
+gunicorn==21.2.0
+requests==2.31.0
