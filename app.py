@@ -6,6 +6,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array
 from PIL import Image
 from io import BytesIO
+from tensorflow.keras.layers import Dense
 
 app = Flask(__name__)
 
@@ -25,8 +26,12 @@ def download_model():
                 fuzzy=True
         )
 
+def Dense_no_quant(*args, **kwargs):
+    kwargs.pop("quantization_config", None)
+    return Dense(*args, **kwargs)
+
 download_model()
-model = load_model(MODEL_PATH)
+model = load_model(MODEL_PATH, custom_objects={"Dense": Dense_no_quant})
 
 def preprocess(image):
     image = image.resize((224, 224))
@@ -55,5 +60,6 @@ def predict():
         "prediction": label,
         "confidence": float(pred)
     })
+
 
 
