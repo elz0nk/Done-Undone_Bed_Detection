@@ -1,74 +1,35 @@
-function isMobile() {
-    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
+const video = document.getElementById("camera");
+const statusText = document.getElementById("status");
 
-if (isMobile()) {
-    const video = document.getElementById("camera");
+navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+        video.srcObject = stream;
+        video.play();
+    })
+    .catch(() => {
+        statusText.innerText = "No se pudo acceder a la cámara";
+    });
 
-    function startCamera() {
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-            .then(stream => {
-                video.srcObject = stream;
-                video.play();
-            })
-            .catch(err => {
-                console.error("Error al acceder a la cámara:", err);
-                document.getElementById("status").innerText = "No se puede acceder a la cámara";
-            });
-    }
+function captureAndPredict() {
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext("2d").drawImage(video, 0, 0);
 
-    startCamera();
+    canvas.toBlob(blob => {
+        const formData = new FormData();
+        formData.append("frame", blob);
 
-    function capture(state) {
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext("2d").drawImage(video, 0, 0);
-
-        canvas.toBlob(blob => {
-            const formData = new FormData();
-            formData.append("frame", blob);
-            formData.append("state", state);
-
-            fetch("/capture_mobile", { method: "POST", body: formData })
-                .then(r => r.json())
-                .then(d => {
-                    document.getElementById("status").innerText =
-                        d.file ? `Imagen guardada: ${d.file}` : "Imagen guardada";
-                })
-                .catch(err => console.error("Error al enviar la imagen:", err));
-        }, "image/jpeg");
-    }
-
-} else {
-    function capture(state){
-        fetch('/capture', {
-            method: 'POST',
-            headers: {'Content-Type':'application/x-www-form-urlencoded'},
-            body: `state=${state}`
+        fetch("/predict", {
+            method: "POST",
+            body: formData
         })
         .then(r => r.json())
         .then(d => {
-            document.getElementById("status").innerText =
-                `Imagen guardada: ${d.file}`;
+            statusText.innerText = `Resultado: ${d.prediction}`;
+        })
+        .catch(() => {
+            statusText.innerText = "Error en la predicción";
         });
-    }
-}
-function retrain(){
-    document.getElementById("status").innerText = "Reentrenando modelo...";
-    fetch('/retrain', {method:'POST'})
-    .then(r => r.json())
-    .then(d => {
-        document.getElementById("status").innerText =
-            "Modelo reentrenado correctamente";
-    });
-}
-
-function toggleInference(){
-    fetch('/toggle_inference', {method:'POST'})
-    .then(r => r.json())
-    .then(d => {
-        document.getElementById("status").innerText =
-            d.enabled ? "Detección ACTIVADA" : "Detección DESACTIVADA";
-    });
+    }, "image/jpeg");
 }
