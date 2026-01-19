@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CNN – Detección de cama</title>
+</head>
+<body style="text-align:center; font-family:Arial">
+    <h1>Detección de cama (CNN)</h1>
+
+    <img id= "video_pc" src="{{ url_for('video_feed') }}" width="640"><br><br>
+    <video id="camera" autoplay playsinline width="640" height="480"></video><br><br>
+
+    <button onclick="capture('hecha')">Guardar HECHA</button>
+    <button onclick="capture('no_hecha')">Guardar NO HECHA</button><br><br>
+
+    <button onclick="retrain()">Reentrenar modelo</button>
+    <button onclick="toggleInference()">Activar / Desactivar detección</button>
+
+
+    <p id="status"></p>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
