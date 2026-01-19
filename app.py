@@ -14,7 +14,7 @@ MODEL_DIR = "model"
 MODEL_FILENAME = "cama_cnn.h5"
 MODEL_PATH = os.path.join(MODEL_DIR, MODEL_FILENAME)
 
-FILE_ID = "1xDqy3KG9qveOq4gcDZ0sJOv1UIwV5uQU"
+FILE_ID = "1SfLrpCdpBAZ4a9f2uK7y7Akst9uJRDX3"
 
 def download_model():
     if not os.path.exists(MODEL_PATH):
@@ -60,6 +60,7 @@ def predict():
         "prediction": label,
         "confidence": float(pred)
     })
+
 
 
 
