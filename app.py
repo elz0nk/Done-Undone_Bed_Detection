@@ -26,12 +26,8 @@ def download_model():
                 fuzzy=True
         )
 
-def Dense_no_quant(*args, **kwargs):
-    kwargs.pop("quantization_config", None)
-    return Dense(*args, **kwargs)
-
 download_model()
-model = load_model(MODEL_PATH, custom_objects={"Dense": Dense_no_quant})
+model = load_model(MODEL_PATH)
 
 def preprocess(image):
     image = image.resize((224, 224))
@@ -60,6 +56,7 @@ def predict():
         "prediction": label,
         "confidence": float(pred)
     })
+
 
 
 
